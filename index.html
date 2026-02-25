@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وقّع - الدعم | Waqe - Support</title>
+    <style>
+        :root {
+            --navy: #0D0B5E;
+            --purple: #4A3F8F;
+            --purple-light: #6B5FBF;
+            --white: #FFFFFF;
+            --off-white: #F4F3FF;
+            --text-muted: #8B85C1;
+            --card-bg: rgba(255,255,255,0.06);
+            --card-border: rgba(255,255,255,0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--navy);
+            color: var(--white);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ─── Background animated blobs ─── */
+        .bg-blobs {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.35;
+            animation: blobFloat 10s ease-in-out infinite alternate;
+        }
+        .blob-1 {
+            width: 500px; height: 500px;
+            background: var(--purple);
+            top: -150px; right: -100px;
+            animation-delay: 0s;
+        }
+        .blob-2 {
+            width: 400px; height: 400px;
+            background: #2A1F7A;
+            bottom: 10%; left: -150px;
+            animation-delay: 3s;
+        }
+        .blob-3 {
+            width: 300px; height: 300px;
+            background: var(--purple-light);
+            top: 40%; right: 30%;
+            animation-delay: 6s;
+        }
+
+        @keyframes blobFloat {
+            0%   { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 30px) scale(1.08); }
+        }
+
+        /* ─── Noise texture overlay ─── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            opacity: 0.4;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ─── Layout ─── */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+
+        /* ─── Nav ─── */
+        nav {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 20px 24px;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+        .lang-toggle {
+            display: flex;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 100px;
+            padding: 4px;
+            gap: 2px;
+        }
+        .lang-toggle button {
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            padding: 6px 18px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .lang-toggle button.active {
+            background: var(--purple);
+            color: white;
+            box-shadow: 0 2px 12px rgba(74, 63, 143, 0.6);
+        }
+
+        /* ─── Hero ─── */
+        .hero {
+            text-align: center;
+            padding: 40px 0 50px;
+            animation: fadeUp 0.8s ease both;
+        }
+        .icon-wrap {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 24px;
+        }
+        .icon-wrap img {
+            width: 110px;
+            height: 110px;
+            border-radius: 26px;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.1),
+                0 20px 60px rgba(0,0,0,0.5),
+                0 0 80px rgba(74,63,143,0.4);
+            animation: iconPulse 4s ease-in-out infinite;
+        }
+        .icon-glow {
+            position: absolute;
+            inset: -20px;
+            background: radial-gradient(circle, rgba(74,63,143,0.5) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: glowPulse 4s ease-in-out infinite;
+            z-index: -1;
+        }
+        @keyframes iconPulse {
+            0%, 100% { transform: translateY(0); box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 20px 60px rgba(0,0,0,0.5), 0 0 80px rgba(74,63,143,0.4); }
+            50% { transform: translateY(-6px); box-shadow: 0 0 0 1px rgba(255,255,255,0.15), 0 30px 80px rgba(0,0,0,0.5), 0 0 100px rgba(74,63,143,0.6); }
+        }
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        .hero h1 {
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #fff 30%, var(--purple-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ─── Cards ─── */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeUp 0.8s ease both;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(107, 95, 191, 0.4);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .card-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--purple), var(--purple-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(74,63,143,0.5);
+        }
+        .card-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        /* ─── Contact link ─── */
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            text-decoration: none;
+            color: var(--white);
+            transition: all 0.3s ease;
+        }
+        .contact-link:hover {
+            background: rgba(107,95,191,0.2);
+            border-color: rgba(107,95,191,0.5);
+            transform: translateX(-4px);
+        }
+        [dir="ltr"] .contact-link:hover { transform: translateX(4px); }
+        .contact-emoji {
+            font-size: 28px;
+            width: 48px;
+            text-align: center;
+        }
+        .contact-link strong {
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .contact-link span {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* ─── FAQ ─── */
+        .faq-item {
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            padding: 18px 0;
+            cursor: pointer;
+        }
+        .faq-item:first-child { padding-top: 0; }
+        .faq-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .faq-question strong {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--white);
+            line-height: 1.5;
+        }
+        .faq-arrow {
+            color: var(--purple-light);
+            font-size: 18px;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+        .faq-item.open .faq-arrow { transform: rotate(180deg); }
+        .faq-answer {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+            opacity: 0;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+            opacity: 1;
+            padding-top: 12px;
+        }
+        .faq-answer p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-muted);
+        }
+
+        /* ─── Footer ─── */
+        footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 30px 20px 20px;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            padding: 6px 14px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 100px;
+            transition: all 0.3s ease;
+        }
+        .footer-links a:hover {
+            color: white;
+            border-color: var(--purple-light);
+            background: rgba(107,95,191,0.15);
+        }
+        .footer-copy {
+            font-size: 12px;
+            color: rgba(139,133,193,0.5);
+        }
+
+        /* ─── Animations ─── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+
+        /* ─── Signature line decoration ─── */
+        .sig-line {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--purple), transparent);
+            margin: 12px auto 0;
+            border-radius: 2px;
+        }
+        [dir="ltr"] .sig-line {
+            background: linear-gradient(90deg, transparent, var(--purple));
+        }
+
+        /* ─── Scrollbar ─── */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--navy); }
+        ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 3px; }
+
+        /* ─── Hidden ─── */
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- Background blobs -->
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Nav -->
+    <nav>
+        <div class="lang-toggle">
+            <button id="btn-ar" class="active" onclick="switchLang('ar')">العربية</button>
+            <button id="btn-en" onclick="switchLang('en')">English</button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="container">
+        <div class="hero">
+            <div class="icon-wrap">
+                <div class="icon-glow"></div>
+                <img src="icon.png" alt="وقّع">
+            </div>
+            <h1 id="hero-title">وقّع</h1>
+            <p id="hero-sub">توقيع المستندات بسهولة وأمان — كل شيء يبقى على جهازك</p>
+            <div class="sig-line"></div>
+        </div>
+
+        <!-- Contact Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">✉️</div>
+                <h2 id="contact-title">تواصل معنا</h2>
+            </div>
+            <a href="mailto:abdulmajeed.k.r@gmail.com?subject=دعم تطبيق وقّع" class="contact-link">
+                <span class="contact-emoji">📩</span>
+                <div>
+                    <strong id="email-label">البريد الإلكتروني</strong>
+                    <span>abdulmajeed.k.r@gmail.com</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- FAQ Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">💡</div>
+                <h2 id="faq-title">الأسئلة الشائعة</h2>
+            </div>
+
+            <div id="faq-ar">
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <strong>هل بياناتي آمنة؟</strong>
+                        <span class="faq-arrow">⌄</span>
+                    </div>
+                    <div class="faq-answer"><p>نعم، جميع العمليات تتم محلياً على جهازك فقط. لا يتم إرسال أي ملف أو بيانات إلى أي سيرفر خارجي.</p></div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <strong>كيف أوقّع ملف PDF؟</strong>
+                        <span class="faq-arrow">⌄</span>
+                    </div>
+                    <div class="faq-answer"><p>افتح التطبيق ← اختر تبويب "وقّع" ← استورد ملف PDF ← انقر على المستند لإضافة توقيعك أو نص أو تاريخ.</p></div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <strong>كيف ألغي الاشتراك؟</strong>
+                        <span class="faq-arrow">⌄</span>
+                    </div>
+                    <div class="faq-answer"><p>الإعدادات على جهازك ← Apple ID ← الاشتراكات ← اختر "وقّع" ← إلغاء الاشتراك.</p></div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <strong>التطبيق لا يفتح ملف PDF، ماذا أفعل؟</strong>
+                        <span class="faq-arrow">⌄</span>
+                    </div>
+                    <div class="faq-answer"><p>تأكد أن الملف بصيغة PDF صالحة وغير محمي بكلمة مرور. إذا استمرت المشكلة تواصل معنا عبر البريد.</p></div>
+                </div>
+            </div>
+
+            <div id="faq-en" class="hidden">
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <strong>Is my data safe?</strong>
+                        <span class="faq-arrow">⌄</span>
+                    </div>
+                    <div class="faq-answer"><p>Yes, all operations are performed locally on your device. No files or data are sent to any external server.</p></div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <strong>How do I sign a PDF?</strong>
+                        <span class="faq-arrow">⌄</span>
+                    </div>
+                    <div class="faq-answer"><p>Open the app → Go to "Sign" tab → Import a PDF → Tap on the document to add your signature, text, or date.</p></div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <strong>How do I cancel my subscription?</strong>
+                        <span class="faq-arrow">⌄</span>
+                    </div>
+                    <div class="faq-answer"><p>Go to Settings → Apple ID → Subscriptions → Select "Waqe" → Cancel Subscription.</p></div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <strong>The app won't open my PDF. What should I do?</strong>
+                        <span class="faq-arrow">⌄</span>
+                    </div>
+                    <div class="faq-answer"><p>Make sure the file is a valid, non-password-protected PDF. If the issue persists, contact us via email.</p></div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /container -->
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="privacy.html" id="privacy-link">سياسة الخصوصية</a>
+            <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" id="terms-link" target="_blank">شروط الاستخدام</a>
+        </div>
+        <p class="footer-copy" id="copyright">© 2026 وقّع · صنع بـ ❤️ في الجوف</p>
+    </footer>
+
+    <script>
+        function switchLang(lang) {
+            const isAr = lang === 'ar';
+            document.documentElement.lang = lang;
+            document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+
+            document.getElementById('btn-ar').classList.toggle('active', isAr);
+            document.getElementById('btn-en').classList.toggle('active', !isAr);
+
+            document.getElementById('hero-title').textContent        = isAr ? 'وقّع' : 'Waqe';
+            document.getElementById('hero-sub').textContent          = isAr ? 'توقيع المستندات بسهولة وأمان — كل شيء يبقى على جهازك' : 'Sign documents easily and securely — everything stays on your device';
+            document.getElementById('contact-title').textContent     = isAr ? 'تواصل معنا' : 'Contact Us';
+            document.getElementById('email-label').textContent       = isAr ? 'البريد الإلكتروني' : 'Email';
+            document.getElementById('faq-title').textContent         = isAr ? 'الأسئلة الشائعة' : 'FAQ';
+            document.getElementById('privacy-link').textContent      = isAr ? 'سياسة الخصوصية' : 'Privacy Policy';
+            document.getElementById('terms-link').textContent        = isAr ? 'شروط الاستخدام' : 'Terms of Use';
+            document.getElementById('copyright').textContent         = isAr ? '© 2026 وقّع · صنع بـ ❤️ في الجوف' : '© 2026 Waqe · Made with ❤️ in Al Jawf';
+
+            document.getElementById('faq-ar').classList.toggle('hidden', !isAr);
+            document.getElementById('faq-en').classList.toggle('hidden', isAr);
+        }
+
+        function toggleFaq(item) {
+            const isOpen = item.classList.contains('open');
+            // Close all
+            document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+            // Open clicked if it was closed
+            if (!isOpen) item.classList.add('open');
+        }
+    </script>
+</body>
+</html>
